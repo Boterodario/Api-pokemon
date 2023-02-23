@@ -32,7 +32,7 @@ async function loadPokemon(url){
             $template += `
 
             <figure>
-            <img src = "${pokemon.sprites.front_default}" alt = "${pokemon.name}">
+            <img src = "${pokemon.sprites.other.dream_world.front_default}" alt = "${pokemon.name}" id="imagen">
             <figcaption> ${pokemon.name}</figcaption>
             </figure>
 
@@ -40,7 +40,7 @@ async function loadPokemon(url){
 
             `;
         }catch(err){
-            console.log(err);
+            // console.log(err);
             let message = err.statusText || "Ocurrio un error";  
             $template += `
             <figure>
