@@ -1,6 +1,7 @@
 const d = document
 $main = d.querySelector("main"),
 $links = d.querySelector(".links");
+$search = d.querySelector("search");
 
 let pokeAPI = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=25";
 
@@ -30,11 +31,15 @@ async function loadPokemon(url){
             if(!res.ok) throw {status:res.status,statusText:res.statusText}
 
             $template += `
-
-            <figure>
-            <img src = "${pokemon.sprites.other.dream_world.front_default}" alt = "${pokemon.name}" id="imagen">
-            <figcaption> ${pokemon.name}</figcaption>
+            <div id = "wrapper">
+            <figure class="content">
+            <img src = "${pokemon.sprites.other.home.front_shiny}" alt = "${pokemon.name}" id="imagen">
+            <figcaption class= "text"> ${pokemon.name}</figcaption>
             </figure>
+            
+
+        
+            </div>
 
 
 
