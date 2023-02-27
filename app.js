@@ -1,17 +1,46 @@
 const d = document
 $main = d.querySelector("main"),
 $links = d.querySelector(".links");
-$forumlario = d.querySelector("#formulario");
-$button =d.querySelector("#button");
+formulario = d.querySelector("#formulario");
+// button = d.querySelector("#button");
+pokeID = d.querySelector("pokeId")
+pokeName = d.querySelector("pokeName")
 
-const filtrar =()=>{
-     console.log(formulario.value);
-    const texto = $formulario.value.toLowerCase();
-    }
 
-button.addEventListener("click",filtrar)
 
-let pokeAPI = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=150";
+
+///evento buscador
+const searchPokemon = event => {
+    event.preventDefault();
+    const {value} = event.target.pokemon;
+    fetch(`https://pokeapi.co/api/v2/pokemon/${value,toLowerCase()}`)
+    .then(data => data.json())
+    .then(response => renderPokemonData(response))
+}
+
+const renderPokemonData = data => {
+    const sprite = data.sprites.other.home.front_shiny;
+    const {stats, types} = data;
+   console.log(data)
+
+   pokeName.texContent = data.name;
+   pokeID.texContent = `Nº ${data.id}`;
+
+    
+}
+
+
+
+
+
+
+let pokeAPI = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=50";
+
+
+
+
+
+
 
 
 async function loadPokemon(url){

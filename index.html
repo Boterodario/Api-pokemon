@@ -13,12 +13,22 @@
        <img src="img/pokemon.svg" alt="fondo"  class="img__primary"> 
      </div>
 
-     <input type="text" name="search" id="formulario" placeholder="¿Que Pokemon Buscas?">
-     <button id="button">Buscar</button>
+     <form action="" onsubmit="searchPokemon(event)">
+     <input type="text" name="pokemon"   autocomplete = "off" >
+     <!-- <button type="button" id="button">Buscar</button> -->
+    </form>
     
     <nav class="links"></nav>
     <main class="grid-fluid"></main> 
     <!-- <figcaption class= "text"> #${pokemon.id}</figcaption> -->
+    
+    <div class="poke-card">pokeName</div>
+    <div>pokeId</div>
+
+
+
+
+
 </body>
 <script src="app.js"></script>
 </html>
