@@ -1,9 +1,18 @@
 const d = document
 $main = d.querySelector("main"),
 $links = d.querySelector(".links");
-$search = d.querySelector("search");
+$forumlario = d.querySelector("#formulario");
+$button =d.querySelector("#button");
 
-let pokeAPI = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=25";
+const filtrar =()=>{
+     console.log(formulario.value);
+    const texto = $formulario.value.toLowerCase();
+    }
+
+button.addEventListener("click",filtrar)
+
+let pokeAPI = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=150";
+
 
 async function loadPokemon(url){
     try{
@@ -32,6 +41,7 @@ async function loadPokemon(url){
 
             $template += `
             <div id = "wrapper">
+            
             <figure class="content">
             <img src = "${pokemon.sprites.other.home.front_shiny}" alt = "${pokemon.name}" id="imagen">
             <figcaption class= "text"> ${pokemon.name}</figcaption>

@@ -3,11 +3,11 @@ html {
   background-color: brown;
 }
 
-/* body { */
-  /* margin: 0; */
-  /* padding: 0; */
-  /* box-sizing: border-box; */
-/* } */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 
 
@@ -60,7 +60,7 @@ html {
   color: white;
   overflow: hidden;
   margin-top: 15%;
-    width: 100%;
+    width: 86%;
 }
 
 .text {
@@ -70,5 +70,40 @@ html {
 
 .pokeball{
   width: 50%;
+}
+
+@media (min-width: 768px){
+
+  #wrapper {
+    background-image: url(img/imagen1.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    border-radius: 6px;
+    width: 49%;
+    grid-area: auto;
+}
+
+  .img__primary {
+    width: 100px;
+    display: grid;
+    grid-template-columns: (1, 1fr);
+  }
+  #imagen{
+    width: 30%;
+  }
+  .grid-fluid {
+    display: flex;
+    justify-items: center;
+    gap: 14px;
+    text-transform: capitalize;
+    flex-wrap: wrap;
+}
+.content{
+  width: 80%;
+}
+.text{
+  font-size: 18px;
+}
+
 }
 
