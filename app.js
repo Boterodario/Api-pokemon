@@ -1,10 +1,8 @@
-const d = document;
-// $main = d.querySelector("main"),
-// $links = d.querySelector(".links");
-// formulario = d.querySelector("#formulario");
-// typeColor = d.querySelector("typeColor");
-card = document.getElementById("card");
-btn = document.getElementById("btn");
+const pokemonContainer = document.querySelector(".pokemon-container");
+const spinner = document.querySelector("#spinner");
+const previous = document.querySelector("#previous");
+const next = document.querySelector("#next");
+
 
 const typeColor = {
   bug: "#26de81",
@@ -24,162 +22,139 @@ const typeColor = {
   rock: "#2d3436",
   water: "#0190FF",
 };
-const url = "https://pokeapi.co/api/v2/pokemon/";
 
-let getPokeData = () => {
-    // Generate a random number between 1 and 150
-    let id = Math.floor(Math.random() * 25 +1) ;
-    // Combine the pokeapi url with pokemon id
-    const finalUrl = url + id;
-    // Fetch generated URL
-    fetch(finalUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        generateCard(data);
-      });
-  };
 
-let generateCard = (data) => {
-  // Get necessary data and assign it to variables
-  console.log(data);
-  const hp = data.stats[0].base_stat;
-  const imgSrc = data.sprites.other.home.front_shiny;
-  const pokeName = data.name[0].toUpperCase() + data.name.slice(1);
-  const statAttack = data.stats[1].base_stat;
-  const statDefense = data.stats[2].base_stat;
-  const statSpeed = data.stats[5].base_stat;
+let offset = 1;
+let limit = 8;
 
-  const themeColor = typeColor[data.types[0].type.name];
-  console.log(themeColor);
-  card.innerHTML = `
-        <p class="hp">
-          <span>HP</span>
-            ${hp}
-        </p>
-        <img src=${imgSrc} / class = "imgs">
-        <h2 class="poke-name">${pokeName}</h2>
-        <div class="types">
-         
-        </div>
-        <div class="stats">
-          <div>
-            <h3>${statAttack}</h3>
-            <p>Attack</p>
-          </div>
-          <div>
-            <h3>${statDefense}</h3>
-            <p>Defense</p>
-          </div>
-          <div>
-            <h3>${statSpeed}</h3>
-            <p>Speed</p>
-          </div>
-        </div>
-  `;
 
-  appendTypes(data.types);
-  styleCard(themeColor);
-};
-let appendTypes = (types) => {
-  types.forEach((item) => {
-    let span = document.createElement("SPAN");
-    span.textContent = item.type.name;
-    document.querySelector(".types").appendChild(span);
-  });
-};
-let styleCard = (color) => {
-  card.style.background = `radial-gradient(circle at 50% 0%, ${color} 36%, #ffffff 36%)`;
-  card.querySelectorAll(".types span").forEach((typeColor) => {
-    typeColor.style.backgroundColor = color;
-  });
-};
-btn.addEventListener("click", getPokeData);
-window.addEventListener("load", getPokeData);
+previous.addEventListener("click", () => {
+  if(offset !=1){
+    offset -= 9;
+    fetchPokemons(offset, limit);
+  }
+  
+  
+})
 
-///evento buscador
-const searchPokemon = event => {
-event.preventDefault();
-const {value} = event.target.pokemon;
-fetch(`https://pokeapi.co/api/v2/pokemon/${value,toLowerCase()}`)
-.then(data => data.json())
-.then(response => renderPokemonData(response))
+next.addEventListener("click", () =>{
+  offset += 9;
+  fetchPokemons(offset, limit);
+})
+
+
+function fetchPokemon(id) {
+  fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
+    .then((response) => response.json())
+    .then((data) => {
+      createPokemon(data);
+      spinner.style.display = "none";
+    });
 }
 
-const renderPokemonData = data => {
-const sprite = data.sprites.other.home.front_shiny;
-const {stats, types} = data;
-   console.log(data)
 
-   pokeName.texContent = data.name;
-   pokeID.texContent = `Nº ${data.id}`;
-
+function fetchPokemons(offset, limit) {
+  spinner.style.display = "block";
+  for (let i = offset; i <= offset + limit; i++) {
+    fetchPokemon(i);
+  }
 }
 
-//  let pokeAPI = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=50";
+function createPokemon(pokemon) {
+  const card = document.createElement("div");
+  card.classList.add("pokemon-block");
 
-// async function loadPokemon(url){
-// try{
-// // main.innerHTML = `<img src="" alt=Cargando...`
-// let res = await fetch(url),
-// json = await res.json(),
-// $template = "",
-// $prevLink,
-// $netxLink;
-//  console.log(json);
-//  if(!res.ok) throw {status:res.status,statusText:res.statusText}
+  const spriteContainer = document.createElement("div");
+  spriteContainer.classList.add("img-container");
 
-//  for(let i = 0; i < json.results.length; i++){
-//  console.log(json.results[i]);
+  const sprite = document.createElement("img");
+  sprite.classList.add("poke");
+  sprite.src = pokemon.sprites.other.home.front_shiny;
 
-//  try{
+  spriteContainer.appendChild(sprite);
 
-// let res = await fetch(json.results[i].url),
-// pokemon = await res.json();
+  const name = document.createElement("p");
+  name.classList.add("name");
+  name.textContent = pokemon.name;
 
-//  console.log(res,pokemon);
+  const hp = document.createElement("h3");
+  hp.classList.add("health");
+  hp.textContent = `HP ${pokemon.stats[0].base_stat.toString()}`;
 
-// if(!res.ok) throw {status:res.status,statusText:res.statusText}
 
-//  $template += `
-//  <div id = "wrapper">
+  
+  const statAttack = document.createElement("h3");
+  statAttack.classList.add("attack");
+  statAttack.textContent = `Attack  ${pokemon.stats[1].base_stat.toString()}`;
 
-// <figure class="content">
-// <img src = "${pokemon.sprites.other.home.front_shiny}" alt = "${pokemon.name}" id="imagen">
-// <figcaption class= "text"> ${pokemon.name}</figcaption>
-// </figure>
-// </div>
+  const statDefense = document.createElement("h3");
+  statDefense.classList.add("defense");
+  statDefense.textContent = `Defense ${pokemon.stats[2].base_stat.toString()}`;
 
-// `;
-// }catch(err){
-// // console.log(err);
-// let message = err.statusText || "Ocurrio un error";
-// $template += `
-// <figure>
+  const Speed = document.createElement("h3")
+  Speed.textContent = `Speed ${pokemon.stats[2].base_stat.toString()}`;
 
-//   /* <figcaption> Error ${err.status}: $}{message} </figcaption> */
-// }
-// {
-//   /* </figure> */
-// }
-// `;
-// }
-//  }
-//    $main.innerHTML = $template;
-//   $prevLink = json.previous ? `<a href= "${json.previous}">⏪</a>`:"";
-//   $nextLink = json.next ? `<a href= "${json.next}">⏭️</a>`:"";
-//   $links.innerHTML = $prevLink+ " " +$nextLink;
-// } catch(err){
-// // console.log(err);
-// let message = err.statusText || "Ocurrio un error";
-// $main.innerHTML = `<p>Error ${err.status}: ${message}</p>`;
-// }
-// }
+  //  const themeColor= document.createElement("h3")
+  //  themeColor.classList.add("Color")
+  //  themeColor.textContent = typeColor.pokemon.types[0].type.name;
 
-// d.addEventListener("DOMContentLoaded", (e) => loadPokemon(pokeAPI));
 
-// d.addEventListener("click", (e) => {
-//   if (e.target.matches(".links a")) {
-    // e.preventDefault();
-    // loadPokemon(e.target.getAttribute("href"));
-//   }
-// });
+
+    // console.log(themeColor);
+  //  pokemonContainer.innerHTML = `
+          // <p class="hp">
+            //  <span>HP</span>
+              //  ${hp}
+      // </p>
+      // <img src=${spriteContainer} / >
+      // <h2 class="poke-name">${name}</h2>
+      // <div class="types">
+   
+      // </div>
+      // <div class="stats">
+    //  <div>
+        // <h3>${statAttack}</h3>
+      // <p>Attack</p>
+      // </div>
+      // <div>
+      // <h3>${statDefense}</h3>
+      // <p>Defense</p>
+    //  </div>
+      // <div>
+      // <h3>${Speed}</h3>
+        // <p>Speed</p>
+        //  </div>
+      // </div>
+          // </div>
+    // `;
+//  appendTypes(pokemon.types);
+//  styleCard(themeColor);
+  // };
+//  let appendTypes = (types) => {
+  // types.forEach((item) => {
+  // let span = document.createElement("SPAN");
+  // span.textContent = item.type.name;
+  // document.querySelector(".types").appendChild(span);
+//  });
+  // ;
+  // let styleCard = (color) => {
+//  card.style.background = `radial-gradient(circle at 50% 0%, ${color} 36%, #ffff`
+//  card.querySelectorAll(".types span").forEach((typeColor) => {
+//  typeColor.style.backgroundColor = color;
+//  });
+//  };
+//  btn.addEventListener("click", getPokeData);
+//  window.addEventListener("load", fetchPokemon);
+
+  card.appendChild(spriteContainer);
+  card.appendChild(name);
+  card.appendChild(hp);
+  card.appendChild(statAttack);
+  card.appendChild(statDefense);
+  card.appendChild(Speed);
+  // card.appendChild(themeColor);
+
+  pokemonContainer.appendChild(card);
+}
+
+fetchPokemons(offset, 81);
